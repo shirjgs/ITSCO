@@ -1,0 +1,81 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(Parser)package edu.itsco;
+
+public class Parser{  public static void main(String args []) throws ParseException  {    Parser parser = new Parser(System.in); //Datos desde el teclado.  }}PARSER_END(Parser)SKIP :{  " "| "\r"| "\t"| "\n"}
+
+//DENIFICION DE PALABRAS RESERVADAS.
+TOKEN:
+{
+  < start: "start" >
+| < finish: "finish" >
+
+//Tipos de datos.
+| < ent: "ent" > //entero
+| < cad: "cad" > //cadena
+| < flo: "flo" > //flotante
+
+//Definir variables
+| < var: "var" > //variables
+
+//Escribir y leer datos desde el teclado. 
+| < input: "input" > //Entrada. Imprimirá el mensaje en la pantalla.
+| < output: "output" > //Salida. Captura desde el teclado.
+
+//SENTENCIAS DE CONTROL
+
+//if
+| < yes: "yes" > //si
+| < ifno: "ifno" > //sino
+| < so: "so" > //entonces
+
+//Switch
+| < select: "select" >
+| < option: "option" >
+| < defect: "defect" >
+
+//for
+| < from: "from" >
+| < to: "to" >
+| < next: "next" >
+
+//while
+| < perform: "perform" > //hacer
+| < aslongas: "aslongas" >  //mientras que
+}
+
+//AREA DE OPERADORES
+TOKEN: {
+  < sum: "+" >
+| < res: "-" >
+| < mul: "*" >
+| < div: "/" >
+| < mod: "%" >
+| < pot: "^" >
+
+| < may: ">" >
+| < men: "<" >
+| < igu: "=" >
+
+| < and: "&&" >
+| < or:  "||" >
+| < not: "!" >
+
+| < pa: "(" >
+| < pc: ")" >
+	
+}
+
+//AREA DE TOKENS DINÁMICOS.
+TOKEN:
+{
+   <#lyrics: ["a"-"z", "A"-"Z"]>
+ | <#number: ["0"-"9"]>
+
+ | <id: (<lyrics>| "_") (<lyrics> | <number> | "_")*>
+
+ | <vent: (<number>)+> //vent: valor entero. 
+ | <vflo: (<number>)+ "." (<number>)+> //vflo: valor flotante.
+ | <vcad: "\""(~["\""])* "\""> //vcad: valor cadena.
+ 
+}
