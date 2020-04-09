@@ -39,55 +39,59 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int defect = 18;
   /** RegularExpression Id. */
-  int from = 19;
+  int breakup = 19;
   /** RegularExpression Id. */
-  int to = 20;
+  int from = 20;
   /** RegularExpression Id. */
-  int next = 21;
+  int to = 21;
   /** RegularExpression Id. */
-  int perform = 22;
+  int next = 22;
   /** RegularExpression Id. */
-  int aslongas = 23;
+  int perform = 23;
   /** RegularExpression Id. */
-  int sum = 24;
+  int aslongas = 24;
   /** RegularExpression Id. */
-  int res = 25;
+  int sum = 25;
   /** RegularExpression Id. */
-  int mul = 26;
+  int res = 26;
   /** RegularExpression Id. */
-  int div = 27;
+  int mul = 27;
   /** RegularExpression Id. */
-  int mod = 28;
+  int div = 28;
   /** RegularExpression Id. */
-  int pot = 29;
+  int mod = 29;
   /** RegularExpression Id. */
-  int may = 30;
+  int pot = 30;
   /** RegularExpression Id. */
-  int men = 31;
+  int may = 31;
   /** RegularExpression Id. */
-  int igu = 32;
+  int men = 32;
   /** RegularExpression Id. */
-  int and = 33;
+  int igu = 33;
   /** RegularExpression Id. */
-  int or = 34;
+  int and = 34;
   /** RegularExpression Id. */
-  int not = 35;
+  int or = 35;
   /** RegularExpression Id. */
-  int pa = 36;
+  int not = 36;
   /** RegularExpression Id. */
-  int pc = 37;
+  int pa = 37;
   /** RegularExpression Id. */
-  int lyrics = 38;
+  int pc = 38;
   /** RegularExpression Id. */
-  int number = 39;
+  int ps = 39;
   /** RegularExpression Id. */
-  int id = 40;
+  int lyrics = 40;
   /** RegularExpression Id. */
-  int vent = 41;
+  int number = 41;
   /** RegularExpression Id. */
-  int vflo = 42;
+  int id = 42;
   /** RegularExpression Id. */
-  int vcad = 43;
+  int vent = 43;
+  /** RegularExpression Id. */
+  int vflo = 44;
+  /** RegularExpression Id. */
+  int vcad = 45;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -113,6 +117,7 @@ public interface ParserConstants {
     "\"select\"",
     "\"option\"",
     "\"defect\"",
+    "\"breakup\"",
     "\"from\"",
     "\"to\"",
     "\"next\"",
@@ -132,6 +137,7 @@ public interface ParserConstants {
     "\"!\"",
     "\"(\"",
     "\")\"",
+    "\":\"",
     "<lyrics>",
     "<number>",
     "<id>",

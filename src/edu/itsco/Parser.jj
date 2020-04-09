@@ -2,7 +2,11 @@
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = true;}PARSER_BEGIN(Parser)package edu.itsco;
 
-public class Parser{  public static void main(String args []) throws ParseException  {    Parser parser = new Parser(System.in); //Datos desde el teclado.  }}PARSER_END(Parser)SKIP :{  " "| "\r"| "\t"| "\n"}
+public class Parser{  public static void main(String args []) throws ParseException  {    Parser parser = new Parser(System.in); //Datos desde el teclado.	System.out.println("Bienvenido(a)");
+	System.out.println("Vamos a comenzar :3");
+	parser.main();
+	System.out.println("Compilo exitosamente.");
+  }}PARSER_END(Parser)SKIP :{  " "| "\r"| "\t"| "\n"}
 
 //DENIFICION DE PALABRAS RESERVADAS.
 TOKEN:
@@ -33,6 +37,7 @@ TOKEN:
 | < select: "select" >
 | < option: "option" >
 | < defect: "defect" >
+| < breakup: "breakup" >
 
 //for
 | < from: "from" >
@@ -41,7 +46,7 @@ TOKEN:
 
 //while
 | < perform: "perform" > //hacer
-| < aslongas: "aslongas" >  //mientras que
+| < aslongas: "aslongas" >  //mientras
 }
 
 //AREA DE OPERADORES
@@ -63,6 +68,8 @@ TOKEN: {
 
 | < pa: "(" >
 | < pc: ")" >
+
+| < ps: ":" >
 	
 }
 
@@ -79,3 +86,123 @@ TOKEN:
  | <vcad: "\""(~["\""])* "\""> //vcad: valor cadena.
  
 }
+
+void main(): { }
+{
+  < start > <id >
+	(
+	  sentencias()	)+
+  < finish >
+}
+
+void sentencias(): { }
+{
+  variable()
+| write()
+| read()
+| asignacion()
+| si()
+| select()
+| from()
+| aslongas()
+| perform()
+}
+
+void variable(): { }
+{
+	< var > <id > tipodato() [ <igu > valor() ]
+}
+  
+void tipodato(): { }
+{
+	< ent > | < cad > | < flo >
+}
+
+void valor(): { }
+{
+	< vent > | < vcad > | < vflo > | < id >
+}
+
+void write(): { }
+{
+	< input > < pa > valor() (< sum > valor() )* < pc >
+}
+
+void read(): { }
+{
+	< output > < pa > < id > < pc > 
+}
+
+void asignacion(): { }
+{
+	< id > <igu > simple()
+}
+
+void simple(): { }
+{
+	( valor() | parentesis() )
+	( aritmetico() (valor() | parentesis()) )*
+} 
+
+void parentesis(): { }
+{
+	< pa > simple() <pc >
+}
+
+void aritmetico(): { }
+{
+	< sum > | < res > | < mul > | < div > | < mod > | < pot >
+}
+
+void si(): { } //if
+{
+	< yes > condicion() < so >
+	( sentencias() )+
+	[< ifno > (sentencias())+ ]
+	< finish > <yes >
+}
+
+void condicion(): {}
+{
+  facil() ( logico() facil() )*
+}
+
+void facil(): {}
+{
+  valor() relacional() valor()
+}
+
+void logico(): { }
+{
+	< and > | < or > | < not >
+}
+
+void relacional(): { }
+{
+	< may > [< igu >] | < men > [ < igu > ] | < igu > <igu > | < not > <igu >
+}
+
+void select(): {} //switch
+{
+  < select > < pa > < id > < pc >
+  ( < option > < vent > < ps > sentencias() < breakup > )+  [ < defect > < ps > sentencias() < breakup >]
+  < finish > < select >
+}
+
+void from(): { } //for
+{
+	< from > < id > < igu > < vent > < to > < vent > ( sentencias() )* < next >
+}
+
+void aslongas(): { } //while
+{
+  < aslongas > < pa > condicion() < pc > ( sentencias() )+ < finish > < aslongas >
+}
+
+void perform(): { } //do while
+{
+  < perform > ( sentencias() )+ < finish > < aslongas > < pa > condicion() < pc >
+}
+
+
+
