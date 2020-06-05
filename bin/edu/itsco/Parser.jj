@@ -1,11 +1,35 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = true;}PARSER_BEGIN(Parser)package edu.itsco;
+import java.util.ArrayList;
 
-public class Parser{  public static void main(String args []) throws ParseException  {    Parser parser = new Parser(System.in); //Datos desde el teclado.	System.out.println("Bienvenido(a)");
+public class Parser{
+  public static ArrayList<Variable> ListaVariables;
+    public static void main(String args []) throws ParseException, SemanticException  {
+    ListaVariables = new ArrayList<Variable>();    Parser parser = new Parser(System.in); //Datos desde el teclado.	System.out.println("Bienvenido(a)");
 	System.out.println("Vamos a comenzar :3");
 	parser.main();
 	System.out.println("Compilo exitosamente.");
+  }
+
+  private static void ingresarVariable(Variable v) throws SemanticException
+  {
+    if(ListaVariables.contains(v))
+    {
+      throw new SemanticException(v, SemanticException.VD); 
+    }
+    else
+    { 
+    ListaVariables.add(v);
+  	}
+  }
+
+  private static void estaVariable(String Id) throws SemanticException
+  {	Variable v = new Variable();
+	v.setId(Id);
+	if(!ListaVariables.contains(v)) {
+	  throw new SemanticException(v,SemanticException.VND);
+	}
   }}PARSER_END(Parser)SKIP :{  " "| "\r"| "\t"| "\n"}
 
 //DENIFICION DE PALABRAS RESERVADAS.
@@ -87,7 +111,7 @@ TOKEN:
  
 }
 
-void main(): { }
+void main() throws SemanticException: { }
 {
   < start > <id >
 	(
@@ -95,7 +119,7 @@ void main(): { }
   < finish >
 }
 
-void sentencias(): { }
+void sentencias() throws SemanticException: { }
 {
   variable()
 | write()
@@ -108,43 +132,74 @@ void sentencias(): { }
 | perform()
 }
 
-void variable(): { }
+void variable() throws SemanticException: {
+  Token TD;
+  Token identificador;
+  boolean inicial = false;
+}
 {
-	< var > <id > tipodato() [ <igu > valor() ]
+	< var > identificador = < id > TD = tipodato() [ < igu > valor() { inicial = true; } ]
+	{
+		Variable var = new Variable(identificador.image, TD.image);
+		var.setInicializada(inicial);
+		ingresarVariable(var);
+	}
 }
   
-void tipodato(): { }
+Token tipodato(): {
+  Token TD;
+}
 {
-	< ent > | < cad > | < flo >
+  (    
+	TD = < ent > | TD = < cad > | TD = < flo >
+  )
+  {
+    return TD;
+  }
 }
 
-void valor(): { }
+void valor() throws SemanticException: {
+	Token Id;
+}
 {
-	< vent > | < vcad > | < vflo > | < id >
+	< vent > | < vcad > | < vflo > | Id = < id >
+	{
+		estaVariable(Id.image);
+	}
 }
 
-void write(): { }
+void write() throws SemanticException: { }
 {
 	< input > < pa > valor() (< sum > valor() )* < pc >
 }
 
-void read(): { }
+void read() throws SemanticException: {
+	Token Id;
+}
 {
-	< output > < pa > < id > < pc > 
+	< output > < pa > Id = < id > < pc >
+	{
+		estaVariable(Id.image);
+	}
 }
 
-void asignacion(): { }
+void asignacion() throws SemanticException: {
+	Token Id;
+}
 {
-	< id > <igu > simple()
+	Id = < id > <igu > simple()
+	{
+		estaVariable(Id.image);
+	}
 }
 
-void simple(): { }
+void simple() throws SemanticException: { }
 {
 	( valor() | parentesis() )
 	( aritmetico() (valor() | parentesis()) )*
 } 
 
-void parentesis(): { }
+void parentesis() throws SemanticException: { }
 {
 	< pa > simple() <pc >
 }
@@ -154,7 +209,7 @@ void aritmetico(): { }
 	< sum > | < res > | < mul > | < div > | < mod > | < pot >
 }
 
-void si(): { } //if
+void si() throws SemanticException: { } //if
 {
 	< yes > condicion() < so >
 	( sentencias() )+
@@ -162,12 +217,12 @@ void si(): { } //if
 	< finish > <yes >
 }
 
-void condicion(): {}
+void condicion() throws SemanticException: {}
 {
   facil() ( logico() facil() )*
 }
 
-void facil(): {}
+void facil() throws SemanticException: {}
 {
   valor() relacional() valor()
 }
@@ -182,24 +237,24 @@ void relacional(): { }
 	< may > [< igu >] | < men > [ < igu > ] | < igu > <igu > | < not > <igu >
 }
 
-void select(): {} //switch
+void select() throws SemanticException: {} //switch
 {
   < select > < pa > < id > < pc >
   ( < option > < vent > < ps > sentencias() < breakup > )+  [ < defect > < ps > sentencias() < breakup >]
   < finish > < select >
 }
 
-void from(): { } //for
+void from() throws SemanticException: { } //for
 {
 	< from > < id > < igu > < vent > < to > < vent > ( sentencias() )* < next >
 }
 
-void aslongas(): { } //while
+void aslongas() throws SemanticException: { } //while
 {
   < aslongas > < pa > condicion() < pc > ( sentencias() )+ < finish > < aslongas >
 }
 
-void perform(): { } //do while
+void perform() throws SemanticException: { } //do while
 {
   < perform > ( sentencias() )+ < finish > < aslongas > < pa > condicion() < pc >
 }
